@@ -43,7 +43,7 @@ def simulation(time_step, t_f, num_rep, a, C):
         positions_list.append(sys.get_positions())
         speeds_list.append(sys.get_speeds())
         total_energy_list.append(sys.total_energy())
-        if not is_valid_integration(total_energy_list[-2], total_energy_list[-2]):
+        if not is_valid_integration(total_energy_list[-2], total_energy_list[-1]):
             raise ValueError("Time step too big")
 
     return positions_list, speeds_list, total_energy_list

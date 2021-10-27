@@ -4,16 +4,13 @@ import constants as cst
 
 
 class System:
-    def __init__(self, num_rep, a=0.4, C=0.3):
-        """
-        a: angstrom
-        """
+    def __init__(self, num_rep, a=cst.angstrom2bohr(0.4), C=0.3):
 
         self.num_rep = num_rep
-        self.a = cst.angstrom2bohr(a)
+        self.a = a
         self.C = C
         self.V0 = 1 / (2 * cst.m_p * self.a ** 2 * C)
-        self.temp = 0.4 * cst.V0 / cst.kb
+        self.temp = 0.4 * self.V0 / cst.kb
         self.K = self.num_rep * cst.m_p * cst.kb ** 2 * self.temp ** 2
 
         self.positions = np.zeros(num_rep)
