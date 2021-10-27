@@ -47,7 +47,7 @@ class System:
         return (1 / self.num_rep) * np.sum(self.positions)
 
     def forces(self):
-        return 4 * self.V0 * (
+        return -4 * self.V0 * (
             self.positions ** 3 / self.a ** 4 - self.positions / self.a ** 2
         ) + np.sum(
             -self.K

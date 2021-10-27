@@ -18,11 +18,13 @@ def is_valid_integration(former_energy, new_energy):
 def simulation(time_step, t_f, num_rep, a, C):
     
     sys = System(num_rep, a, C)
-    sys.set_positions(np.sqrt(2) * a * np.random.random())
+    sys.set_positions(1.5*a)
 
     positions_list = [sys.get_positions()]
     speeds_list = [sys.get_speeds()]
     total_energy_list = [sys.total_energy()]
+    potential_energy_list = [sys.potential_energy()]
+    kinetic_energy_list = [sys.kinetic_energy()]
     t = time_step
 
     sys.set_positions(sys.get_positions() + time_step ** 2 / 2 * sys.forces() / cst.m_p)
@@ -31,19 +33,24 @@ def simulation(time_step, t_f, num_rep, a, C):
     positions_list.append(sys.get_positions())
     speeds_list.append(sys.get_speeds())
     total_energy_list.append(sys.total_energy())
+    potential_energy_list.append(sys.potential_energy())
+    kinetic_energy_list.append(sys.kinetic_energy())
     niter = np.int(t_f / time_step)
 
     for i in range(1, niter):
 
         sys.set_positions(
-            2 * sys.get_positions() - positions_list[-1] + time_step ** 2 * sys.forces()
+            2 * sys.get_positions() - positions_list[-2] + time_step ** 2 * sys.forces() / cst.m_p
         )
-        sys.set_speeds((sys.get_positions() - positions_list[-1]) / (2 * time_step))
+        sys.set_speeds((sys.get_positions() - positions_list[-2]) / (2 * time_step))
 
         positions_list.append(sys.get_positions())
         speeds_list.append(sys.get_speeds())
         total_energy_list.append(sys.total_energy())
-        if not is_valid_integration(total_energy_list[-2], total_energy_list[-1]):
-            raise ValueError("Time step too big")
+        potential_energy_list.append(sys.potential_energy())
+        kinetic_energy_list.append(sys.kinetic_energy())
+        #if not is_valid_integration(total_energy_list[-2], total_energy_list[-1]):
+         #   raise ValueError("Time step too big")
 
-    return positions_list, speeds_list, total_energy_list
+    return positions_list, speeds_list, total_energy_list, potential_energy_list, kinetic_energy_list
+
