@@ -4,7 +4,6 @@ import constants as cst
 
 
 class System:
-
     def __init__(self, num_rep, a=0.04, C=0.3):
 
         self.num_rep = num_rep
@@ -50,7 +49,9 @@ class System:
         return (1 / self.num_rep) * np.sum(self.positions)
 
     def forces(self):
-        return 4 * self.V0 * (self.positions ** 3 / a ** 4 - x / a ** 2) + np.sum(
+        return 4 * self.V0 * (
+            self.positions ** 3 / self.a ** 4 - self.positions / self.a ** 2
+        ) + np.sum(
             -self.K
             * (
                 2 * self.positions
