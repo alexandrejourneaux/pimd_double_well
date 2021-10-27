@@ -18,7 +18,7 @@ def is_valid_integration(former_energy, new_energy):
 def simulation(time_step, t_f, num_rep, a, C):
 
     sys = System(num_rep, a, C)
-    sys.set_positions(np.sqrt(2) * a * np.random.random())
+    sys.set_positions(np.sqrt(2) * np.random.random())
 
     positions_list = [sys.get_positions()]
     speeds_list = [sys.get_speeds()]
