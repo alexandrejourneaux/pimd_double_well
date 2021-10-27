@@ -7,7 +7,7 @@ a = cst.angstrom2bohr(0.4)
 C = 0.3
 time_step = 1e-3
 tf = 1e-1
-position, speed, energy, pot_energy, kin_energy = simulation(1, 10000, 1, cst.angstrom2bohr(0.4), 0.3)
+position, speed, energy, pot_energy, kin_energy = simulation(1, 10000, 1, a)
 
 plt.figure(1)
 plt.plot(position)

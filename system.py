@@ -4,11 +4,12 @@ import constants as cst
 
 
 class System:
-    def __init__(self, num_rep, a=cst.angstrom2bohr(0.4), C=0.3):
+    def __init__(self, num_rep, gamma, a=cst.angstrom2bohr(0.4), C=0.3):
 
         self.num_rep = num_rep
         self.a = a
         self.C = C
+        self.gamma = gamma
         self.V0 = 1 / (2 * cst.m_p * self.a ** 2 * C)
         self.temp = 0.4 * self.V0 / cst.kb
         self.K = self.num_rep * cst.m_p * cst.kb ** 2 * self.temp ** 2
@@ -46,7 +47,10 @@ class System:
     def centroid_position(self):
         return (1 / self.num_rep) * np.sum(self.positions)
 
-    def forces(self):
+    def forces(self, time_step):
+        
+        Ir = 2 * cst.m_p * gamma * cst.kb * self.temp
+
         return -4 * self.V0 * (
             self.positions ** 3 / self.a ** 4 - self.positions / self.a ** 2
         ) + np.sum(
@@ -57,6 +61,8 @@ class System:
                 - np.roll(self.positions, 1)
             )
         )
+        - cst.m_p * gamma * self.speeds
+        + np.sqrt(Ir/time_step) * np.random.normal()
 
     def _V(self, x):
         return self.V0 * ((x / self.a) ** 2 - 1) ** 2

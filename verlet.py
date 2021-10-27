@@ -15,10 +15,10 @@ def is_valid_integration(former_energy, new_energy):
     return np.abs(former_energy - new_energy) / new_energy < 1e-4
 
 
-def simulation(time_step, t_f, num_rep, a, C):
+def simulation(time_step, t_f, num_rep, pos_init, gamma, a=cst.angstrom2bohr(0.4), C=0.3):
     
-    sys = System(num_rep, a, C)
-    sys.set_positions(1.5*a)
+    sys = System(num_rep, gamma, a, C)
+    sys.set_positions(pos_init)
 
     positions_list = [sys.get_positions()]
     speeds_list = [sys.get_speeds()]
@@ -27,7 +27,7 @@ def simulation(time_step, t_f, num_rep, a, C):
     kinetic_energy_list = [sys.kinetic_energy()]
     t = time_step
 
-    sys.set_positions(sys.get_positions() + time_step ** 2 / 2 * sys.forces() / cst.m_p)
+    sys.set_positions(sys.get_positions() + time_step ** 2 / 2 * sys.forces(t) / cst.m_p)
     sys.set_speeds((sys.get_positions() - positions_list[0]) / time_step)
 
     positions_list.append(sys.get_positions())
@@ -40,7 +40,7 @@ def simulation(time_step, t_f, num_rep, a, C):
     for i in range(1, niter):
 
         sys.set_positions(
-            2 * sys.get_positions() - positions_list[-2] + time_step ** 2 * sys.forces() / cst.m_p
+            2 * sys.get_positions() - positions_list[-2] + time_step ** 2 * sys.forces(t) / cst.m_p
         )
         sys.set_speeds((sys.get_positions() - positions_list[-2]) / (2 * time_step))
 
