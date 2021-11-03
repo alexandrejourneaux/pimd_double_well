@@ -26,6 +26,7 @@ def simulation(time_step, t_f, num_rep, pos_init, gamma, a=cst.angstrom2bohr(0.4
     total_energy_list = [sys.total_energy()]
     potential_energy_list = [sys.potential_energy()]
     kinetic_energy_list = [sys.kinetic_energy()]
+    mean_kin_energy_list = [] 
 
     sys.set_positions(sys.get_positions() + time_step ** 2 / 2 * sys.forces(time_step) / cst.m_p)
     sys.set_speeds((sys.get_positions() - positions_list[0]) / time_step)
@@ -35,6 +36,7 @@ def simulation(time_step, t_f, num_rep, pos_init, gamma, a=cst.angstrom2bohr(0.4
     total_energy_list.append(sys.total_energy())
     potential_energy_list.append(sys.potential_energy())
     kinetic_energy_list.append(sys.kinetic_energy())
+    mean_kin_energy_list.append(sys.kinetic_energy())
     niter = np.int(t_f / time_step)
 
     for i in range(1, niter):
@@ -49,8 +51,9 @@ def simulation(time_step, t_f, num_rep, pos_init, gamma, a=cst.angstrom2bohr(0.4
         total_energy_list.append(sys.total_energy())
         potential_energy_list.append(sys.potential_energy())
         kinetic_energy_list.append(sys.kinetic_energy())
+        mean_kin_energy_list.append(np.mean(kinetic_energy_list))
         #if not is_valid_integration(total_energy_list[-2], total_energy_list[-1]):
          #   raise ValueError("Time step too big")
 
-    return positions_list, speeds_list, total_energy_list, potential_energy_list, kinetic_energy_list
+    return positions_list, speeds_list, total_energy_list, potential_energy_list, kinetic_energy_list, mean_kin_energy_list
 
