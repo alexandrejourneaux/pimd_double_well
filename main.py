@@ -5,18 +5,32 @@ import matplotlib.pyplot as plt
 
 a = cst.angstrom2bohr(0.4)
 C = 0.3
-time_step = 1e-3
-tf = 1e-1
-position, speed, energy, pot_energy, kin_energy = simulation(1, 10000, 1, a)
+time_step = 1
+tf = 10000
+nb_repro = 1
+pos_init = a
+gamma = 0
 
+position, speed, energy, pot_energy, kin_energy = simulation(time_step, tf, nb_repro, pos_init, gamma)
+time = [i*time_step for i in range(int(tf/time_step))]
 plt.figure(1)
-plt.plot(position)
+plt.plot(time, position)
+plt.xlabel("Time")
+plt.ylabel("Position")
+plt.title("Evolution of position over time")
 
 plt.figure(2)
-plt.plot(speed)
+plt.plot(time, speed)
+plt.xlabel("Time")
+plt.ylabel("Speed")
+plt.title("Evolution of speed over time")
 
 plt.figure(3)
-plt.plot(energy)
-plt.plot(pot_energy)
-plt.plot(kin_energy)
+plt.plot(time, energy, label="total")
+plt.plot(time, pot_energy, label="potential")
+plt.plot(time, kin_energy, label="kinetic")
+plt.title("Evolution of total, potential and kinetic energy over time")
+plt.xlabel("Time")
+plt.ylabel("Energy")
+plt.legend()
 plt.show()
