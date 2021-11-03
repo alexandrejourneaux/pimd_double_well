@@ -50,7 +50,7 @@ class System:
     def forces(self, time_step):
 
         Ir = 2 * cst.m_p * self.gamma * cst.kb * self.temp
-        print(np.sqrt(Ir / time_step) * np.random.normal(size=(self.num_rep,)))
+
         return (
             -4
             * self.V0

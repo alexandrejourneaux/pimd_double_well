@@ -18,6 +18,7 @@ def is_valid_integration(former_energy, new_energy):
 def simulation(time_step, t_f, num_rep, pos_init, gamma, a=cst.angstrom2bohr(0.4), C=0.3):
     
     sys = System(num_rep, gamma, a, C)
+    print("Initial temp :", sys.get_temp())
     sys.set_positions(pos_init)
 
     positions_list = [sys.get_positions()]

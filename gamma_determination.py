@@ -14,6 +14,7 @@ gamma = 0.100
 #for time_step in np.logspace(6, -6, 13):
 position, speed, energy, pot_energy, kin_energy = simulation(time_step, tf, nb_repro, pos_init, gamma)
 
+print("Final temp : "+ str(2*np.mean(kin_energy)/cst.kb))
 time = [i*time_step for i in range(int(tf/time_step) + 1)]
 
 plt.figure(1)
@@ -36,4 +37,5 @@ plt.title("Evolution of total, potential and kinetic energy over time")
 plt.xlabel("Time")
 plt.ylabel("Energy")
 plt.legend()
+plt.savefig()
 plt.show()
