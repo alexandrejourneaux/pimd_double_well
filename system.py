@@ -49,7 +49,7 @@ class System:
 
     def forces(self, time_step):
         
-        Ir = 2 * cst.m_p * gamma * cst.kb * self.temp
+        Ir = 2 * cst.m_p * self.gamma * cst.kb * self.temp
 
         return -4 * self.V0 * (
             self.positions ** 3 / self.a ** 4 - self.positions / self.a ** 2
@@ -61,7 +61,7 @@ class System:
                 - np.roll(self.positions, 1)
             )
         )
-        - cst.m_p * gamma * self.speeds
+        - cst.m_p * self.gamma * self.speeds
         + np.sqrt(Ir/time_step) * np.random.normal()
 
     def _V(self, x):
