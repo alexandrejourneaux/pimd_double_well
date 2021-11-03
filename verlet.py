@@ -25,9 +25,8 @@ def simulation(time_step, t_f, num_rep, pos_init, gamma, a=cst.angstrom2bohr(0.4
     total_energy_list = [sys.total_energy()]
     potential_energy_list = [sys.potential_energy()]
     kinetic_energy_list = [sys.kinetic_energy()]
-    t = time_step
 
-    sys.set_positions(sys.get_positions() + time_step ** 2 / 2 * sys.forces(t) / cst.m_p)
+    sys.set_positions(sys.get_positions() + time_step ** 2 / 2 * sys.forces(time_step) / cst.m_p)
     sys.set_speeds((sys.get_positions() - positions_list[0]) / time_step)
 
     positions_list.append(sys.get_positions())
@@ -40,7 +39,7 @@ def simulation(time_step, t_f, num_rep, pos_init, gamma, a=cst.angstrom2bohr(0.4
     for i in range(1, niter):
 
         sys.set_positions(
-            2 * sys.get_positions() - positions_list[-2] + time_step ** 2 * sys.forces(t) / cst.m_p
+            2 * sys.get_positions() - positions_list[-2] + time_step ** 2 * sys.forces(time_step) / cst.m_p
         )
         sys.set_speeds((sys.get_positions() - positions_list[-2]) / (2 * time_step))
 

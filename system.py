@@ -48,21 +48,24 @@ class System:
         return (1 / self.num_rep) * np.sum(self.positions)
 
     def forces(self, time_step):
-        
-        Ir = 2 * cst.m_p * self.gamma * cst.kb * self.temp
 
-        return -4 * self.V0 * (
-            self.positions ** 3 / self.a ** 4 - self.positions / self.a ** 2
-        ) + np.sum(
-            -self.K
-            * (
-                2 * self.positions
-                - np.roll(self.positions, -1)
-                - np.roll(self.positions, 1)
+        Ir = 2 * cst.m_p * self.gamma * cst.kb * self.temp
+        print(np.sqrt(Ir / time_step) * np.random.normal(size=(self.num_rep,)))
+        return (
+            -4
+            * self.V0
+            * (self.positions ** 3 / self.a ** 4 - self.positions / self.a ** 2)
+            + np.sum(
+                -self.K
+                * (
+                    2 * self.positions
+                    - np.roll(self.positions, -1)
+                    - np.roll(self.positions, 1)
+                )
             )
+            - cst.m_p * self.gamma * self.speeds
+            + np.sqrt(Ir / time_step) * np.random.normal(size=(self.num_rep,))
         )
-        - cst.m_p * self.gamma * self.speeds
-        + np.sqrt(Ir/time_step) * np.random.normal()
 
     def _V(self, x):
         return self.V0 * ((x / self.a) ** 2 - 1) ** 2
