@@ -1,36 +1,23 @@
 import numpy as np
 import constants as cst
 from verlet import simulation
-import matplotlib.pyplot as plt
+from output import write_out
 
 a = cst.angstrom2bohr(0.4)
+print("a=",a,"bohr","=",cst.bohr2angstrom(a),"Angstrom")
 C = 0.3
-time_step = 1
-tf = 10000
-nb_repro = 1
-pos_init = a
-gamma = 0
+print("C=",C)
+time_step = 4.0
+print("dt=",time_step,"a.u","=",cst.au2fs(time_step),"fs")
+tf = 80000
+print("nstep=",tf)
+nb_repro = 4
+print("Trotter nb=",nb_repro)
+pos_init = 0.0
+print("Initial position=",pos_init, "bohr")
+gamma = 0.004
+print("Gamma=",gamma,"a.u","=",gamma/0.0241888432650478,"1/fs","=",1e3*gamma/0.0241888432650478,"THz")
 
-position, speed, energy, pot_energy, kin_energy = simulation(time_step, tf, nb_repro, pos_init, gamma)
-time = [i*time_step for i in range(int(tf/time_step))]
-plt.figure(1)
-plt.plot(time, position)
-plt.xlabel("Time")
-plt.ylabel("Position")
-plt.title("Evolution of position over time")
+position, speed, energy, pot_energy, kin_energy, mean_kin_energy, mean_pot_energy = simulation(time_step, tf, nb_repro, pos_init, gamma, a, C)
 
-plt.figure(2)
-plt.plot(time, speed)
-plt.xlabel("Time")
-plt.ylabel("Speed")
-plt.title("Evolution of speed over time")
-
-plt.figure(3)
-plt.plot(time, energy, label="total")
-plt.plot(time, pot_energy, label="potential")
-plt.plot(time, kin_energy, label="kinetic")
-plt.title("Evolution of total, potential and kinetic energy over time")
-plt.xlabel("Time")
-plt.ylabel("Energy")
-plt.legend()
-plt.show()
+write_out("", position, speed, pot_energy, kin_energy, energy, mean_pot_energy, mean_kin_energy)
