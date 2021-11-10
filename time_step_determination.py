@@ -8,8 +8,24 @@ Finding the optimal time step for the simulation: we want delta E / E small enou
 We choose a time step of 1.
 """
 a = cst.angstrom2bohr(0.4)
+print("a=",a,"bohr","=",cst.bohr2angstrom(a),"Angstrom")
 C = 0.3
-for time_step in np.logspace(3, -3, 7):
-    position, speed, energy, pot_energy, kin_energy = simulation(time_step, 10000, 1, 0.5*a, 0)
-    delta_energy = np.max(energy) - np.min(energy)
-    print("Time step:", time_step, "energy relative variation", delta_energy / energy[0])
+print("C=",C)
+time_step = 4.0
+print("dt=",time_step,"a.u","=",cst.au2fs(time_step),"fs")
+tf = 80000
+print("nstep=",tf)
+nb_repro = 4
+print("Trotter nb=",nb_repro)
+pos_init = 1.05*a 
+print("Initial position=",pos_init, "bohr")
+gamma = 0
+print("Gamma=",gamma,"a.u","=",gamma/0.0241888432650478,"1/fs","=",1e3*gamma/0.0241888432650478,"THz")
+
+delta_energy = []
+for time_step in np.logspace(3, -2, 6):
+    position, speed, energy, pot_energy, kin_energy, mean_kin_energy, mean_pot_energy = simulation(time_step, tf, nb_repro, pos_init, gamma, a, C)
+    delta_energy.append((np.max(energy) - np.min(energy)) / energy[0])
+    print("Time step:", time_step, "energy relative variation", delta_energy[-1])
+
+plt.plot(np.logspace(3, -2, 6), delta_energy)

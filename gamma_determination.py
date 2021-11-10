@@ -1,52 +1,31 @@
 import numpy as np
 import constants as cst
 from verlet import simulation
-import matplotlib.pyplot as plt
+from output import write_out
 
 a = cst.angstrom2bohr(0.4)
+print("a=",a,"bohr","=",cst.bohr2angstrom(a),"Angstrom")
 C = 0.3
-time_step = 1
-tf = 10000
+print("C=",C)
+time_step = 4.0
+print("dt=",time_step,"a.u","=",cst.au2fs(time_step),"fs")
+tf = 80000
+print("nstep=",tf)
 nb_repro = 1
-pos_init = a
-gamma = 0.100
+print("Trotter nb=",nb_repro)
+pos_init = 0.0
+print("Initial position=",pos_init, "bohr")
 
-ii = 0
-for gamma in np.linspace(0.01, 1.0, 10): #np.logspace(6, -6, 13):
-    position, speed, energy, pot_energy, kin_energy, mean_kin_energy = simulation(time_step, tf, nb_repro, pos_init, gamma)
-    print("Final temp : "+ str(2*np.mean(kin_energy)/cst.kb))
+gamma_list = np.logspace(-3, 0, 10)
+temp_list = []
+for gamma in gamma_list:
+    position, speed, energy, pot_energy, kin_energy, mean_kin_energy, mean_pot_energy = simulation(time_step, tf, nb_repro, pos_init, gamma, a, C)
+    temp_list.append(2 * mean_kin_energy[-1] / cst.kb)
+    print("temp obtained=", temp_list[-1], "K")
 
-    time = [i*time_step for i in range(int(tf/time_step) + 1)]
-
-    plt.figure(ii+1)
-    plt.plot(time, position)
-    plt.xlabel("Time")
-    plt.ylabel("Position")
-    plt.title("Evolution of position over time")
-    plt.savefig("position"+str(int(np.log10(gamma))))
-    
-    plt.figure(ii+2)
-    plt.plot(time, speed)
-    plt.xlabel("Time")
-    plt.ylabel("Speed")
-    plt.title("Evolution of speed over time")
-    plt.savefig("speed"+str(int(np.log10(gamma))))
-    
-    plt.figure(ii+3)
-    plt.plot(time[:-1], mean_kin_energy)
-    plt.xlabel("Time")
-    plt.ylabel("Energy")
-    plt.title("Evolution of mean energy over time")
-    plt.savefig("speed"+str(int(np.log10(gamma))))
-
-    plt.figure(ii+4)
-    plt.plot(time, energy, label="total")
-    plt.plot(time, pot_energy, label="potential")
-    plt.plot(time, kin_energy, label="kinetic")
-    plt.title("Evolution of total, potential and kinetic energy over time")
-    plt.xlabel("Time")
-    plt.ylabel("Energy")
-    plt.legend()
-    plt.savefig(f"energy_{int(np.log10(gamma))}")
-    ii+=4
-    plt.show()
+f = open('gamma_det.dat','w')
+for i in range(len(gamma_list)):
+    f.write(str(gamma_list[i])+" ")
+    f.write(str(temp_list[i]))
+    f.write("\n")
+f.close()

@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import tqdm
 import constants as cst
 from system import System
 
@@ -49,7 +50,7 @@ def simulation(time_step, t_f, num_rep, pos_init, gamma, a=cst.angstrom2bohr(0.4
     mean_pot_energy_list.append(np.mean(potential_energy_list))
     niter = np.int(t_f / time_step)
 
-    for i in range(1, niter):
+    for i in tqdm(range(1, niter)):
 
         sys.set_positions(
             2 * sys.get_positions() - positions_list[-2] + time_step ** 2 * sys.forces(time_step) / cst.m_p

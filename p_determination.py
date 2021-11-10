@@ -9,15 +9,25 @@ C = 0.3
 print("C=",C)
 time_step = 4.0
 print("dt=",time_step,"a.u","=",cst.au2fs(time_step),"fs")
-tf = 800000
+tf = 80000
 print("nstep=",tf)
-nb_repro = 100
+nb_repro = 4
 print("Trotter nb=",nb_repro)
 pos_init = 0.0
 print("Initial position=",pos_init, "bohr")
 gamma = 0.001
 print("Gamma=",gamma,"a.u","=",gamma/0.0241888432650478,"1/fs","=",1e3*gamma/0.0241888432650478,"THz")
 
-position, speed, energy, pot_energy, kin_energy, mean_kin_energy, mean_pot_energy = simulation(time_step, tf, nb_repro, pos_init, gamma, a, C)
+P_list = np.arange(1, 11)
+mean_energy_list = []
+for P in P_list:
+    position, speed, energy, pot_energy, kin_energy, mean_kin_energy, mean_pot_energy = simulation(time_step, tf, P, pos_init, gamma, a, C)
+    mean_energy_list.append(mean_kin_energy[-1] + mean_pot_energy[-1])
+    print("energy obtained=", mean_energy_list[-1])
 
-write_out("", position, speed, pot_energy, kin_energy, energy, mean_pot_energy, mean_kin_energy)
+f = open('P_det.dat','w')
+for i in range(len(P_list)):
+    f.write(str(P_list[i])+" ")
+    f.write(str(mean_energy_list[i]))
+    f.write("\n")
+f.close()
