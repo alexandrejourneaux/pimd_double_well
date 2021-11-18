@@ -83,6 +83,7 @@ def simulation(
             potential_energy_list = potential_energy_list[-2:]
             kinetic_energy_list = kinetic_energy_list[-2:]
             mean_pot_energy_list = mean_pot_energy_list[-2:]
+            mean_kin_energy_list = mean_kin_energy_list[-2:]
 
         sys.set_positions(
             2 * sys.get_positions()
@@ -96,10 +97,8 @@ def simulation(
         total_energy_list.append(sys.total_energy())
         potential_energy_list.append(sys.potential_energy())
         kinetic_energy_list.append(sys.kinetic_energy())
-        mean_kin_energy_list.append(np.mean(kinetic_energy_list))
-        mean_pot_energy_list.append(np.mean(potential_energy_list))
-        # if not is_valid_integration(total_energy_list[-2], total_energy_list[-1]):
-        #   raise ValueError("Time step too big")
+        mean_kin_energy_list.append((mean_kin_energy_list[-1]*i + kinetic_energy_list[-1]) / (i+1))
+        mean_pot_energy_list.append((mean_pot_energy_list[-1]*i + potential_energy_list[-1]) / (i+1))
 
     return (
         positions_list,

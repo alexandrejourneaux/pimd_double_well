@@ -9,7 +9,7 @@ C = 0.3
 print("C=",C)
 time_step = 4.0
 print("dt=",time_step,"a.u","=",cst.au2fs(time_step),"fs")
-tf = 800000
+tf = 8000000
 print("nstep=",tf)
 nb_repro = 100
 print("Trotter nb=",nb_repro)

@@ -41,7 +41,7 @@ def write_out(suffix, position, speed, pot_energy, kin_energy, energy, mean_pot_
         f.write(str(mean_kin_energy[i])+" "+str(2.0*mean_kin_energy[i]/cst.kb)+"\n")
     f.close()
     
-#    f = open('av_tot_ener'+suffix.strip()+'.dat','a')
-#    for i in range(len(mean_kin_energy)):
-#        f.write(str(mean_pot_energy[i]+mean_kin_energy[i])+"\n")
-#    f.close()
+    f = open('av_tot_ener'+suffix.strip()+'.dat','a')
+    for i in range(len(mean_kin_energy)):
+        f.write(str(mean_pot_energy[i]+mean_kin_energy[i])+"\n")
+    f.close()
